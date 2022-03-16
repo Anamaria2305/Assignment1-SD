@@ -23,13 +23,14 @@ public class VacationPackageService {
     }
 
     public void insertVacationPackageS(VacationPackage vacationPackage,VacationDestination vacationDestinations) {
-        if( vacationPackage.getPackageName()!=null && !vacationPackage.getPackageName().isEmpty()){
+
+        if( vacationPackage.getPackageName()!=null && !vacationPackage.getPackageName().isEmpty() && (vacationPackage.getStartTime().getYear() <122 || vacationPackage.getEndTime().getYear()<122 || vacationPackage.getStartTime().getYear() >130 || vacationPackage.getEndTime().getYear()>130)){
 
 
             vacationPackageRepository.insertVacationPackage(vacationPackage,vacationDestinations);
         }
         else {
-            System.out.println("Cannot insert vacation package in db");
+            System.out.println("Cannot insert vacation package in db. Maybe the year is not between 2022 and 2030");
 
         }
     }
@@ -75,11 +76,11 @@ public class VacationPackageService {
     }
 
     public void updateVacationPackageS(Integer id,String packageName, Float price, Date startDate, Date endDate, String extraDet, Integer maxBooked) {
-        if( packageName!=null && !packageName.isEmpty()){
+        if( packageName!=null && !packageName.isEmpty() && (startDate.getYear() <122 || endDate.getYear()<122 || startDate.getYear() >130 || endDate.getYear() >130)){
             vacationPackageRepository.updateVacationPackage(id,packageName,price,startDate,endDate,extraDet,maxBooked);
         }
         else {
-            System.out.println("Cannot update vacation package from db, something is wrong with the data.");
+            System.out.println("Cannot update vacation package from db, something is wrong with the data.Maybe the year is not between 2022 and 2030");
 
         }
     }

@@ -113,18 +113,22 @@ public class userScreen {
                     textArea1.setText(null);
                     List<VacationPackage> result = new ArrayList<>();
                     VacationPackageService vacationPackageService=new VacationPackageService();
-                    try{
-                         result=vacationPackageService.filterByDateVacationPackage(date12,date23);
-                        if(result.isEmpty()){
+                    if(textField4.getText().matches("^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$") && textField5.getText().matches("^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$")) {
+                        try {
+                            result = vacationPackageService.filterByDateVacationPackage(date12, date23);
+                            if (result.isEmpty()) {
 
-                            textArea1.append("No existing Vacation Packages between these dates");
+                                textArea1.append("No existing Vacation Packages between these dates");
+                            } else
+                                textArea1.append(result.toString());
+                        } catch (NullPointerException ex) {
+                            System.out.println("gol");
                         }
-                        else
-                            textArea1.append(result.toString());
                     }
-                    catch(NullPointerException ex){
-                        System.out.println("gol");
-                    }
+                    else
+                    {JFrame f;
+                        f=new JFrame();
+                        JOptionPane.showMessageDialog(f,"That is not a valid date");}
 
                 }
                 catch (ParseException ex) {

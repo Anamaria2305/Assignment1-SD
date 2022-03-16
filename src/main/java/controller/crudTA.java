@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static controller.logIn.takenId;
 
@@ -54,6 +55,7 @@ public class crudTA {
     public crudTA(final JFrame frame){
         curbooked.setText("0");
         status.setText("NOT_BOOKED");
+
         insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,6 +76,8 @@ public class crudTA {
         insertVacationPackageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Pattern p = Pattern.compile("^d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$");
+
                 Float price2=(float)0.0;
                 Integer maxbooked2=0;
                 VacationDestinationService vacationDestinationService=new VacationDestinationService();
@@ -93,13 +97,19 @@ public class crudTA {
 
                 try {
                     Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(start.getText());
-                    System.out.println(date1);
-                    System.out.println(start.getText());
                     Date date2=new SimpleDateFormat("yyyy-MM-dd").parse(end.getText());
-                    System.out.println(date2);
-                    VacationPackage vacationPackage=new VacationPackage(name.getText(),price2,date1,date2,exdet.getText(),maxbooked2,0,"NOT_BOOKED",vacationDestination);
-                    VacationPackageService vacationPackageService= new VacationPackageService();
-                    vacationPackageService.insertVacationPackageS(vacationPackage,vacationDestination);
+                    if(start.getText().matches("^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$") && end.getText().matches("^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$"))
+                    {
+                        VacationPackage vacationPackage=new VacationPackage(name.getText(),price2,date1,date2,exdet.getText(),maxbooked2,0,"NOT_BOOKED",vacationDestination);
+                        VacationPackageService vacationPackageService= new VacationPackageService();
+                        vacationPackageService.insertVacationPackageS(vacationPackage,vacationDestination);
+                    }
+                    else {
+                        JFrame f;
+                        f=new JFrame();
+                        JOptionPane.showMessageDialog(f,"That is not a valid date");
+                    };
+
                 } catch (ParseException ex) {
                     JFrame f;
                     f=new JFrame();
@@ -158,8 +168,13 @@ public class crudTA {
                     Date date12 = formatter.parse(date);
                     String date2 = eenddate.getText();
                     Date date23 = formatter.parse(date2);
-                    VacationPackageService vacationPackageService1=new VacationPackageService();
-                    vacationPackageService1.updateVacationPackageS(id, ename.getText(),price3,date12,date23,eed.getText(),maxbooked3);
+                    if(estartdate.getText().matches("^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$") && eenddate.getText().matches("^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$" )) {
+                        VacationPackageService vacationPackageService1 = new VacationPackageService();
+                        vacationPackageService1.updateVacationPackageS(id, ename.getText(), price3, date12, date23, eed.getText(), maxbooked3);
+                    }
+                    else {JFrame f;
+                    f=new JFrame();
+                    JOptionPane.showMessageDialog(f,"That is not a valid date");}
                 } catch (ParseException ex) {
                     ex.printStackTrace();
                 }
