@@ -44,13 +44,19 @@ public class userScreen {
                 textArea1.setText(null);
                 List<VacationPackage> result = new ArrayList<>();
                 VacationPackageService vacationPackageService=new VacationPackageService();
-                result=vacationPackageService.showAllAvVacationPackage("NOT_BOOKED","IN_PROGRESS");
-                if(result.isEmpty()){
+                try{
+                    result=vacationPackageService.showAllAvVacationPackage("NOT_BOOKED","IN_PROGRESS");
+                    if(result.isEmpty()){
 
-                    textArea1.append("No available Vacation Packages");
+                        textArea1.append("No available Vacation Packages");
+                    }
+                    else
+                        textArea1.append(result.toString());
                 }
-                else
-                    textArea1.append(result.toString());
+               catch(NullPointerException ex){
+                   textArea1.append("No available Vacation Packages");
+               }
+
             }
         });
         fdest.addActionListener(new ActionListener() {
@@ -107,16 +113,25 @@ public class userScreen {
                     textArea1.setText(null);
                     List<VacationPackage> result = new ArrayList<>();
                     VacationPackageService vacationPackageService=new VacationPackageService();
-                    result=vacationPackageService.filterByDateVacationPackage(date12,date23);
-                    if(result.isEmpty()){
+                    try{
+                         result=vacationPackageService.filterByDateVacationPackage(date12,date23);
+                        if(result.isEmpty()){
 
-                        textArea1.append("No existing Vacation Packages between these dates");
+                            textArea1.append("No existing Vacation Packages between these dates");
+                        }
+                        else
+                            textArea1.append(result.toString());
                     }
-                    else
-                        textArea1.append(result.toString());
+                    catch(NullPointerException ex){
+                        System.out.println("gol");
+                    }
+
                 }
                 catch (ParseException ex) {
-                    ex.printStackTrace();
+                    JFrame f;
+                    f=new JFrame();
+                    JOptionPane.showMessageDialog(f,"Please enter date in format YYYY-MM-DD");
+
                 }
 
 
@@ -170,13 +185,19 @@ public class userScreen {
                 textArea1.setText(null);
                 List<VacationDestination> result = new ArrayList<>();
                 VacationDestinationService vacationDestinationService=new VacationDestinationService();
-                result=vacationDestinationService.showAllVacationDestination();
-                if(result.isEmpty()){
+                try{
+                    result=vacationDestinationService.showAllVacationDestination();
+                    if(result.isEmpty()){
 
+                        textArea1.append("No existing Vacation Destination");
+                    }
+                    else
+                        textArea1.append(result.toString());
+                }
+                catch(NullPointerException ex){
                     textArea1.append("No existing Vacation Destination");
                 }
-                else
-                    textArea1.append(result.toString());
+
             }
         });
         viewAllBookedVacantionButton.addActionListener(new ActionListener() {
@@ -193,6 +214,7 @@ public class userScreen {
                 }
                 else
                     textArea1.append(result.toString());
+
 
             }
         });

@@ -74,19 +74,36 @@ public class crudTA {
         insertVacationPackageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Float price2=Float.parseFloat(price.getText());
-                Integer maxbooked2=Integer.parseInt(maxbooked.getText());
-                Integer iddst=Integer.parseInt(destid.getText());
+                Float price2=(float)0.0;
+                Integer maxbooked2=0;
                 VacationDestinationService vacationDestinationService=new VacationDestinationService();
-                VacationDestination vacationDestination=vacationDestinationService.findById(iddst);
+                VacationDestination vacationDestination= new VacationDestination();
+                try{
+                    price2=Float.parseFloat(price.getText());
+                    maxbooked2=Integer.parseInt(maxbooked.getText());
+                    Integer iddst=Integer.parseInt(destid.getText());
+                  vacationDestination=vacationDestinationService.findById(iddst);
+                }
+                catch (NumberFormatException ex){
+                    JFrame f;
+                    f=new JFrame();
+                    JOptionPane.showMessageDialog(f,"Price, maxBooked and id must be a number.");
+
+                }
+
                 try {
-                    Date date1=new SimpleDateFormat("YYYY-MM-DD").parse(start.getText());
-                    Date date2=new SimpleDateFormat("YYYY-MM-DD").parse(end.getText());
+                    Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(start.getText());
+                    System.out.println(date1);
+                    System.out.println(start.getText());
+                    Date date2=new SimpleDateFormat("yyyy-MM-dd").parse(end.getText());
+                    System.out.println(date2);
                     VacationPackage vacationPackage=new VacationPackage(name.getText(),price2,date1,date2,exdet.getText(),maxbooked2,0,"NOT_BOOKED",vacationDestination);
                     VacationPackageService vacationPackageService= new VacationPackageService();
-                    vacationPackageService.insertVacationPackageS(vacationPackage);
+                    vacationPackageService.insertVacationPackageS(vacationPackage,vacationDestination);
                 } catch (ParseException ex) {
-                    ex.printStackTrace();
+                    JFrame f;
+                    f=new JFrame();
+                    JOptionPane.showMessageDialog(f,"Date Format is not valid. Must be yyyy-MM-dd");
                 }
 
 
@@ -106,21 +123,35 @@ public class crudTA {
                 textarea.setText(null);
                 List<VacationPackage> result = new ArrayList<>();
                 VacationPackageService vacationPackageService=new VacationPackageService();
-                result=vacationPackageService.showAllVacationPackage();
-                if(result.isEmpty()){
 
-                    textarea.append("No Vacation Packages");
-                }
-                else
-                    textarea.append(result.toString());
+                    result = vacationPackageService.showAllVacationPackage();
+                    if(result.isEmpty()){
+
+                        textarea.append("No existing Vacation ");
+                    }
+                    else
+                        textarea.append(result.toString());
+
+
             }
         });
         updateExistingVacationPackageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Float price3=Float.parseFloat(eprice.getText());
-                Integer maxbooked3=Integer.parseInt(emb.getText());
-                Integer id=Integer.parseInt(oldname.getText());
+                Float price3=(float)0.0;
+                Integer maxbooked3=0;
+                Integer id=0;
+                VacationDestinationService vacationDestinationService=new VacationDestinationService();
+                VacationDestination vacationDestination= new VacationDestination();
+                try{
+                price3=Float.parseFloat(eprice.getText());
+                maxbooked3=Integer.parseInt(emb.getText());
+                id=Integer.parseInt(oldname.getText());}
+                catch(NumberFormatException ex){
+                    JFrame f;
+                    f=new JFrame();
+                    JOptionPane.showMessageDialog(f,"Price, maxBooked and id must be a number.");
+                }
                 try {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                     String date = estartdate.getText();
@@ -155,13 +186,19 @@ public class crudTA {
                 textarea.setText(null);
                 List<VacationDestination> result = new ArrayList<>();
                 VacationDestinationService vacationDestinationService=new VacationDestinationService();
-                result=vacationDestinationService.showAllVacationDestination();
-                if(result.isEmpty()){
+                try {
+                    result = vacationDestinationService.showAllVacationDestination();
+                    if(result.isEmpty()){
 
+                        textarea.append("No existing Vacation Destination");
+                    }
+                    else
+                        textarea.append(result.toString());
+                }
+                catch(NullPointerException ex){
                     textarea.append("No existing Vacation Destination");
                 }
-                else
-                    textarea.append(result.toString());
+
             }
         });
     }

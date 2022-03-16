@@ -1,6 +1,7 @@
 package repository;
 
 import entity.User;
+import entity.VacationDestination;
 import entity.VacationPackage;
 
 import javax.persistence.*;
@@ -13,11 +14,18 @@ import java.util.List;
 public class VacationPackageRepository {
     private static final EntityManagerFactory entityManagerFactory=
             Persistence.createEntityManagerFactory("ro.tutorial.lab.SD");
-    public void insertVacationPackage(VacationPackage vacationPackage){
+    public void insertVacationPackage(VacationPackage vacationPackage, VacationDestination vacationDestination){
         EntityManager em= entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
+        vacationPackage.setVacationDestination(vacationDestination);
         try{
         em.persist(vacationPackage);
+            List<VacationPackage> vacPac= vacationDestination.getVacationPackages();
+            vacPac.add(vacationPackage);
+            vacationDestination.setVacationPackages(vacPac);
+
+            em.merge(vacationDestination);
+            em.merge(vacationPackage);
         }
         catch(PersistenceException e){
             JFrame f;
@@ -39,7 +47,7 @@ public class VacationPackageRepository {
         catch(NoResultException e){
             JFrame f;
             f=new JFrame();
-            JOptionPane.showMessageDialog(f,"No vacation packageR with this name is found");
+            JOptionPane.showMessageDialog(f,"No vacation package with this name is found");
         }
 
         em.getTransaction().commit();

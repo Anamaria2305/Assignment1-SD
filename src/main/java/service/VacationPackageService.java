@@ -6,7 +6,11 @@ import entity.VacationPackage;
 import repository.VacationDestinationRepository;
 import repository.VacationPackageRepository;
 
+import javax.swing.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,9 +22,11 @@ public class VacationPackageService {
         vacationPackageRepository= new VacationPackageRepository();
     }
 
-    public void insertVacationPackageS(VacationPackage vacationPackage) {
+    public void insertVacationPackageS(VacationPackage vacationPackage,VacationDestination vacationDestinations) {
         if( vacationPackage.getPackageName()!=null && !vacationPackage.getPackageName().isEmpty()){
-            vacationPackageRepository.insertVacationPackage(vacationPackage);
+
+
+            vacationPackageRepository.insertVacationPackage(vacationPackage,vacationDestinations);
         }
         else {
             System.out.println("Cannot insert vacation package in db");
@@ -32,7 +38,9 @@ public class VacationPackageService {
             vacationPackageRepository.deleteVacationPackage(packageName);
         }
         else {
-            System.out.println("Cannot delete vacation package from db, something is wrong with the data.");
+            JFrame f;
+            f=new JFrame();
+            JOptionPane.showMessageDialog(f,"Please enter some data");
 
         }
     }
@@ -52,8 +60,17 @@ public class VacationPackageService {
         return  this.showAllVacationPackage().stream().filter(vacationPackage -> vacationPackage.getPrice()>pmin && vacationPackage.getPrice()<pmax).collect(Collectors.toList());
 
     }
-    public List<VacationPackage> filterByDateVacationPackage(Date d1,Date d2){
-        return  this.showAllVacationPackage().stream().filter(vacationPackage -> vacationPackage.getStartTime().after(d1) && vacationPackage.getStartTime().before(d2)).collect(Collectors.toList());
+    public List<VacationPackage> filterByDateVacationPackage(Date d1,Date d2)  {
+        if(d1.getYear() <122 || d2.getYear() <122 || d1.getYear() >130 || d2.getYear() >130)
+
+        {
+            JFrame f;
+            f=new JFrame();
+            JOptionPane.showMessageDialog(f,"Introduce a valid date");
+            return  null;
+        }
+        else
+            return this.showAllVacationPackage().stream().filter(vacationPackage -> vacationPackage.getStartTime().after(d1) && vacationPackage.getStartTime().before(d2)).collect(Collectors.toList());
 
     }
 

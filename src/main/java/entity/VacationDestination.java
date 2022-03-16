@@ -33,6 +33,10 @@ public class VacationDestination {
         this.destinationName = destinationName;
     }
 
+    public void setVacationPackages(List<VacationPackage> vacationPackages) {
+        this.vacationPackages = vacationPackages;
+    }
+
     @Override
     public String toString() {
         return "VacationDestination[" +

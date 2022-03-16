@@ -20,17 +20,9 @@ public class VacationDestinationRepository {
     public void deleteVacationDestination(String destinationN){
         EntityManager em= entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
-        try {
-            em.createQuery("delete from VacationDestination where destinationName=:destinationN")
+        em.createQuery("delete from VacationDestination where destinationName=:destinationN")
                     .setParameter("destinationN", destinationN)
                     .executeUpdate();
-
-        }
-        catch(NoResultException e){
-            JFrame f;
-            f=new JFrame();
-            JOptionPane.showMessageDialog(f,"No vacation destination with this name is found");
-        }
 
         em.getTransaction().commit();
         em.close();
@@ -46,7 +38,7 @@ public class VacationDestinationRepository {
         catch(NoResultException e){
             JFrame f;
             f=new JFrame();
-            JOptionPane.showMessageDialog(f,"No vacation destination found repository");
+            JOptionPane.showMessageDialog(f,"No vacation destination with this name is found");
         }
         em.getTransaction().commit();
         em.close();

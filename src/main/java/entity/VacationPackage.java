@@ -86,6 +86,10 @@ public class VacationPackage {
 
     public VacationPackage(){}
 
+    public void setVacationDestination(VacationDestination vacationDestination) {
+        this.vacationDestination = vacationDestination;
+    }
+
     public VacationPackage(String packageName, float price, Date startTime, Date endTime, String extraDetails, int maxBooked, int currentBooked, String status, VacationDestination vacationDestination) {
         this.packageName = packageName;
         this.price = price;

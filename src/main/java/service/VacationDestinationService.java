@@ -4,6 +4,7 @@ import entity.VacationDestination;
 import entity.VacationPackage;
 import repository.VacationDestinationRepository;
 
+import javax.swing.*;
 import java.util.List;
 
 public class VacationDestinationService {
@@ -26,7 +27,9 @@ public class VacationDestinationService {
             vacationDestinationRepository.deleteVacationDestination(vacationName);
         }
         else {
-            System.out.println("Cannot delete vacation destination from db, something is wrong with the data.");
+            JFrame f;
+            f=new JFrame();
+            JOptionPane.showMessageDialog(f,"You did not enter any value");
 
         }
     }
